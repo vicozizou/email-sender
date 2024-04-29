@@ -1,5 +1,5 @@
 # Email Sender
-Consists a simple piece of software written in Typescript which send emails using a queue (implemented in Bull).
+Consists a simple piece of software written in Typescript which send emails using a queue (implemented in Bull and Bee).
 
 ## Stack
 The tech stack is pretty simple:
