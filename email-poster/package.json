@@ -5,7 +5,6 @@
   "main": "main.js",
   "scripts": {
     "dev": "nodemon src/poster.ts",
-    "dev-bee": "nodemon src/poster-bee.ts",
     "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",

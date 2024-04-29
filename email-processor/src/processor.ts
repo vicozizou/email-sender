@@ -1,21 +1,25 @@
-import Bull, { Job } from "bull";
 import nodemailer from "nodemailer";
+import { EmailMessage, EmailProcessor, Job } from "./EmailProcessor";
+import { BeeEmailProcessor } from "./BeeEmailProcessor";
+import { BullEmailProcessor } from "./BullEmailProcessor";
 
+const redisUrl = "redis://localhost:6379";
 const smptHost = "smtp.ethereal.email";
 const smptPort = 587;
 
-interface EmailMessage {
-    from: string;
-    to: string;
-    subject: string;
-    body: string;
-};
+const resolveQueueOption = (): EmailProcessor => {
+    const queueOption = process.env.QUEUE_OPTION || "BEE"
+    switch(queueOption) {
+        case "BEE":
+            return new BeeEmailProcessor(redisUrl, processEmailQueue);
+        case "BULL":
+            return new BullEmailProcessor(redisUrl, processEmailQueue);
+        default:
+            throw new Error(`Invalid queue option: ${queueOption}`);
+    }
+}
 
-const emailQueue = new Bull("email", {
-    redis: "localhost:6379",
-});
-
-const processEmailQueue = async (job: Job) => {
+const processEmailQueue = async (job: Job<EmailMessage>) => {
     const testAccount = await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
         host: smptHost,
@@ -44,5 +48,7 @@ const processEmailQueue = async (job: Job) => {
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 };
-  
-emailQueue.process(processEmailQueue);
+
+const processor = resolveQueueOption();
+
+processor.process();
