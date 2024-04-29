@@ -1,0 +1,34 @@
+{
+  "name": "email-processor",
+  "version": "1.0.0",
+  "description": "Processes emails previously sent to a Redis queue and sends them using Nodemailer",
+  "main": "main.js",
+  "scripts": {
+    "dev": "nodemon src/processor.ts",
+    "dev-bee": "nodemon src/processor-bee.ts",
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "pack": "ncc build -o dist",
+    "all": "npm run build && npm run format && npm run pack"
+  },
+  "keywords": [],
+  "author": "vicozizou",
+  "license": "ISC",
+  "dependencies": {
+    "bee-queue": "^1.7.1",
+    "bull": "^4.12.2",
+    "nodemailer": "^6.9.13"
+  },
+  "devDependencies": {
+    "@types/bull": "^4.10.0",
+    "@types/node": "^20.12.7",
+    "@types/nodemailer": "^6.4.14",
+    "@vercel/ncc": "^0.38.1",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5",
+    "ts-lint": "^4.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
